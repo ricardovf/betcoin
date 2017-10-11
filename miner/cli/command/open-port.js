@@ -1,18 +1,19 @@
-const p2p = require('../../p2p');
-const logger = require('../util/logger.js');
+const logger = require('../../../lib/util/cli/logger.js')
+
+const betcoin = require('../../betcoin')
 
 module.exports = function (vorpal) {
   vorpal
     .command('open <port>', 'Open port to accept incoming connections. Eg: open 2727')
     .alias('o')
-    .action(function(args, callback) {
+    .action(function (args, callback) {
       if (args.port) {
-        if(typeof args.port === 'number') {
-          p2p.startServer(args.port);
+        if (typeof args.port === 'number') {
+          betcoin.startServer('localhost', args.port)
         } else {
           logger.log(`❌  invalid port!`)
         }
       }
-      callback();
+      callback()
     })
 }
