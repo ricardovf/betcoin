@@ -4,5 +4,10 @@
 
 `````
 $ git clone git@github.com:joaogui/betcoin.git
-$ cd betcoin
+$ yarn install
+`````
+
+## mine
+`````
+$ yarn run mine
 `````
