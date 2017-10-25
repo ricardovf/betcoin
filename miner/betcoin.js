@@ -1,20 +1,20 @@
 const HttpServer = require('./../lib/httpServer')
 const Blockchain = require('./../lib/blockchain')
-const Operator   = require('./../lib/operator')
-const Miner      = require('./../lib/miner')
-const Node       = require('./../lib/node')
+const Operator = require('./../lib/operator')
+const Miner = require('./../lib/miner')
+const Node = require('./../lib/node')
 
 const logger = require('../lib/util/cli/logger.js')
 
 class BetcoinFactory {
   constructor () {
-    this.logger     = logger
-    this.name       = 'default'
+    this.logger = logger
+    this.name = 'default'
     this.blockchain = new Blockchain(this.name, this.logger)
-    this.operator   = new Operator(this.name, this.blockchain, this.logger)
-    this.miner      = new Miner(this.blockchain, this.logger)
-    this.node       = null
-    this.server     = null
+    this.operator = new Operator(this.name, this.blockchain, this.logger)
+    this.miner = new Miner(this.blockchain, this.logger)
+    this.node = null
+    this.server = null
   }
 
   startServer (host, port) {
@@ -29,13 +29,19 @@ class BetcoinFactory {
         this.server.listen(host, port)
       }
     } else {
-      this.node   = new Node(host, port, [], this.blockchain)
+      this.node = new Node(host, port, [], this.blockchain)
       this.server = new HttpServer(this.node, this.blockchain, this.operator, this.miner)
 
       this.server.listen(host, port)
     }
 
     return this.server
+  }
+
+  stopServer () {
+    if (this.isNode()) {
+      this.server.close()
+    }
   }
 
   isNode () {
@@ -49,12 +55,11 @@ class BetcoinFactory {
    * @param name
    */
   rename (name) {
-    if (this.name === name)
-      return
+    if (this.name === name) { return }
 
     this.name = name
-    this.blockchain.rename(name);
-    this.operator.rename(name);
+    this.blockchain.rename(name)
+    this.operator.rename(name)
   }
 }
 
