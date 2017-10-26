@@ -11,6 +11,10 @@ module.exports = function (vorpal) {
           .then((newBlock) => {
             newBlock = Block.fromJson(newBlock)
             betcoin.blockchain.addBlock(newBlock)
+
+            vorpal.exec('b l').then(() => {
+              vorpal.exec(`t ${newBlock.hash}`)
+            })
           })
           .catch((ex) => {
             // @todo deal with it

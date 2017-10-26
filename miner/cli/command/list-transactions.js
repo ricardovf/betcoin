@@ -5,7 +5,7 @@ const R = require('ramda')
 const colors = require('colors/safe')
 
 const idRegExp   = /^[0-9]+$/
-const hashRegExp = /^[a-zA-Z0-9]+$/
+const hashRegExp = /^[a-zA-Z0-9]{4,}$/
 
 module.exports = function (vorpal) {
   vorpal
@@ -36,6 +36,7 @@ module.exports = function (vorpal) {
           // Fetch by hash or index
           let block = betcoin.blockchain.getBlockByHash(args.options)
           if (block) {
+            logger.log(colors.blue(`Showing transactions on the block #${block.index}:`))
             table.logTransactions(block.transactions)
           } else {
             let transaction = betcoin.blockchain.getTransactionFromBlocksById(args.options)

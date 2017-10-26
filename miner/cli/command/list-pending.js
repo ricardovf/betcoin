@@ -5,12 +5,12 @@ const colors = require('colors/safe')
 
 module.exports = function (vorpal) {
   vorpal
-    .command('pending [options]', 'See the pending transactions that are not yet on the blockchain.')
+    .command('pending', 'See the pending transactions that are not yet on the blockchain.')
     .alias('pt')
     .action(function (args, callback) {
       let transactions = betcoin.blockchain.getAllPendingTransactions()
 
-      if ( ! transactions) {
+      if ( ! transactions || transactions.length === 0) {
         logger.log('No pending transactions found!')
       } else {
         logger.log(colors.blue(`Showing all pending transactions:`))
