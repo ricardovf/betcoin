@@ -1,5 +1,4 @@
 const logger = require('../../../lib/util/cli/logger.js')
-
 const betcoin = require('../../betcoin')
 
 module.exports = function (vorpal) {

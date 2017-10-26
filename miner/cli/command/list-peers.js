@@ -1,4 +1,4 @@
-const p2p = require('../../p2p')
+const betcoin = require('../../betcoin')
 const logger = require('../../../lib/util/cli/logger.js')
 
 module.exports = function (vorpal) {
@@ -6,9 +6,14 @@ module.exports = function (vorpal) {
     .command('peers', 'Get the list of connected peers.')
     .alias('p')
     .action(function (args, callback) {
-      p2p.peers.forEach(function (peer) {
-        logger.log(`👤  ${peer.pxpPeer.socket._host} \n`)
-      })
+      if (! betcoin.node || betcoin.node.peers.length === 0) {
+        logger.log('Not connected to any peer.')
+      } else {
+        betcoin.node.peers.forEach(function (peer) {
+          logger.log(`👤  ${peer.url} \n`)
+        })
+      }
+
       callback()
     })
 }

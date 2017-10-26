@@ -1,0 +1,22 @@
+const table   = require('../util/table.js')
+const betcoin = require('../../betcoin')
+const logger  = require('../../../lib/util/cli/logger.js')
+const colors = require('colors/safe')
+
+module.exports = function (vorpal) {
+  vorpal
+    .command('pending [options]', 'See the pending transactions that are not yet on the blockchain.')
+    .alias('pt')
+    .action(function (args, callback) {
+      let transactions = betcoin.blockchain.getAllPendingTransactions()
+
+      if ( ! transactions) {
+        logger.log('No pending transactions found!')
+      } else {
+        logger.log(colors.blue(`Showing all pending transactions:`))
+        table.logTransactions(transactions)
+      }
+
+      callback()
+    })
+}

@@ -23,3 +23,8 @@ bets on events, transfer bets to other wallets, etc.
 `````
 $ yarn run interfacer
 `````
+
+
+## Reference
+
+[Emoji list](http://www.unicode.org/emoji/charts/full-emoji-list.html)

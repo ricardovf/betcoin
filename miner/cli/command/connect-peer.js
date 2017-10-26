@@ -1,4 +1,4 @@
-const p2p = require('../../p2p')
+const betcoin = require('../../betcoin')
 
 module.exports = function (vorpal) {
   vorpal
@@ -6,8 +6,9 @@ module.exports = function (vorpal) {
     .alias('c')
     .action(function (args, callback) {
       if (args.host && args.port) {
-        p2p.connectToPeer(args.host, args.port)
-        p2p.discoverPeers()
+        betcoin.node.connectToPeer({
+          url: `http://${args.host}:${args.port}`
+        })
       }
       callback()
     })
