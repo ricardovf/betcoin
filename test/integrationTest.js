@@ -12,7 +12,7 @@ const logLevel = 0
 
 require('../lib/util/consoleWrapper.js')('integrationTest', logLevel)
 
-describe('Integration Test', () => {
+describe('Integration Test:', () => {
   const name1 = 'integrationTest1'
   const name2 = 'integrationTest2'
 
