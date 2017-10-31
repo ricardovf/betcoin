@@ -8,9 +8,7 @@ const Miner = require('../lib/miner')
 const Node = require('../lib/node')
 const fs = require('fs-extra')
 
-const logLevel = 0
-
-require('../lib/util/consoleWrapper.js')('integrationTest', logLevel)
+const logger = require('../lib/util/cli/logger.js')
 
 describe('Integration Test:', () => {
   const name1 = 'integrationTest1'
@@ -18,11 +16,11 @@ describe('Integration Test:', () => {
 
   let createBetcoin = (name, host, port, peers) => {
     fs.removeSync('data/' + name + '/')
-    let blockchain = new Blockchain(name)
-    let operator = new Operator(name, blockchain)
-    let miner = new Miner(blockchain, logLevel)
-    let node = new Node(host, port, peers, blockchain)
-    let httpServer = new HttpServer(node, blockchain, operator, miner)
+    let blockchain = new Blockchain(name, logger)
+    let operator = new Operator(name, blockchain, logger)
+    let miner = new Miner(blockchain, logger)
+    let node = new Node(host, port, peers, blockchain, logger)
+    let httpServer = new HttpServer(node, blockchain, operator, miner, logger)
     return httpServer.listen(host, port)
   }
 

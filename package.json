@@ -6,7 +6,7 @@
   "scripts": {
     "miner": "node ./miner/bin/main.js",
     "lint": "./node_modules/standard/bin/cmd.js",
-    "test": "node_modules/mocha/bin/_mocha -u bdd --colors test/",
+    "test": "NODE_ENV=test node_modules/mocha/bin/_mocha -u bdd --colors test/",
     "coverage": "node_modules/.bin/nyc --reporter=lcov --reporter=text --clean node node_modules/mocha/bin/_mocha -u bdd --colors test/"
   },
   "keywords": [],

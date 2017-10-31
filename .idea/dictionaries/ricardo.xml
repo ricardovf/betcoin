@@ -6,6 +6,7 @@
       <w>crypto</w>
       <w>dirname</w>
       <w>eslint</w>
+      <w>supertest</w>
       <w>vorpal</w>
     </words>
   </dictionary>

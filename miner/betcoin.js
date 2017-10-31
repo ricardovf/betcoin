@@ -29,8 +29,8 @@ class BetcoinFactory {
         this.server.listen(host, port)
       }
     } else {
-      this.node = new Node(host, port, [], this.blockchain)
-      this.server = new HttpServer(this.node, this.blockchain, this.operator, this.miner)
+      this.node = new Node(host, port, [], this.blockchain, this.logger)
+      this.server = new HttpServer(this.node, this.blockchain, this.operator, this.miner, this.logger)
 
       this.server.listen(host, port)
     }
