@@ -1,4 +1,4 @@
-const betcoin = require('../../betcoin')
+const betcoin = require('../../../lib/betcoin/index')
 const Block = require('../../../lib/blockchain/block')
 
 module.exports = function (vorpal) {

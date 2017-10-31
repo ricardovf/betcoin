@@ -1,4 +1,4 @@
-const table   = require('../../../lib/util/cli/table.js')
+const table   = require('../util/table.js')
 const betcoin = require('../../../lib/betcoin/index')
 const logger  = require('../../../lib/util/cli/logger.js')
 const colors = require('colors/safe')
