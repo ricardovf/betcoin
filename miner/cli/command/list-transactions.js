@@ -40,11 +40,9 @@ module.exports = function (vorpal) {
             table.logTransactions(block.transactions)
           } else {
             let transaction = betcoin.blockchain.getTransactionFromBlocksById(args.options)
-            console.log(transaction)
 
             if ( ! transaction) {
               transaction = betcoin.blockchain.getTransactionFromBlocksByHash(args.options)
-              console.log(transaction)
             }
 
             if ( ! transaction) {
