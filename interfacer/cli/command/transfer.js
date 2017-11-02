@@ -34,12 +34,12 @@ module.exports = function (vorpal) {
           {
             type   : 'input',
             name   : 'amount',
-            message: 'Qual valor você quer transferir?',
+            message: 'Qual valor você quer transferir? ',
           },
           {
             type   : 'input',
             name   : 'password',
-            message: 'Informe a senha da carteira de origem',
+            message: 'Informe a senha da carteira de origem: ',
           }
         ], (result) => {
           let walletId     = betcoin.operator.getWalletByAddress(result.fromAddress)
@@ -65,11 +65,5 @@ module.exports = function (vorpal) {
           callback()
         })
       }
-
-      if (args.walletId && args.walletPassword) {
-
-      }
-      //
-      //callback()
     })
 }

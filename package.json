@@ -47,9 +47,9 @@
   "devDependencies": {
     "ava": "^0.21.0",
     "mocha": "^3.3.0",
-    "should": "^13.1.3",
     "mocha-steps": "^1.0.2",
     "nyc": "^10.3.0",
+    "should": "^13.1.3",
     "sinon": "^2.3.8",
     "standard": "*",
     "supertest": "^1.0.0"

@@ -10,9 +10,9 @@ const fs         = require('fs-extra')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe('Integration Test:', () => {
-  const name1 = 'integrationTest1'
-  const name2 = 'integrationTest2'
+describe('Basic transactions integration Test:', () => {
+  const name1 = 'basicTransactionsIntegrationTest1'
+  const name2 = 'basicTransactionsIntegrationTest2'
 
   let createBetcoin = (name, host, port, peers) => {
     fs.removeSync('data/' + name + '/')

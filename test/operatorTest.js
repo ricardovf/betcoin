@@ -80,7 +80,7 @@ describe('Operator', function () {
     })
   })
 
-  describe.only('getWalletByAddress()', function () {
+  describe('getWalletByAddress()', function () {
     it('should return null when there is no wallet on the address', function () {
       let newWallet  = operator.createWalletFromPassword(password)
       let newAddress = operator.generateAddressForWallet(newWallet.id)
