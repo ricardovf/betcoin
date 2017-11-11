@@ -64,7 +64,7 @@ module.exports = function(vorpal) {
                 throw new ArgumentError(`Invalid password for wallet '${walletId}'`)
 
               let newBet = betcoin.betsManager.addBet(result.betEvent, result.betType, result.betOn, walletId, result.fromAddress, result.betAmount, result.fromAddress)
-              logger.log(colors.blue(`O evento ${newBet.id} foi adicionado com sucesso!`))
+              logger.log(colors.blue(`A aposta ${newBet.id} foi adicionado com sucesso!`))
             
             } catch (ex) {
               if (ex instanceof ArgumentError || ex instanceof TransactionAssertionError)
