@@ -8,6 +8,7 @@ module.exports = function (vorpal) {
     .use(require('./command/transfer.js'))
     .use(require('./command/list-events.js'))
     .use(require('./command/add-event.js'))
+    .use(require('./command/add-bet.js'))
     .use(require('../../miner/cli/command/list-blockchain.js'))
     .use(require('../../miner/cli/command/list-transactions.js'))
     .use(require('../../miner/cli/command/open-port.js'))
