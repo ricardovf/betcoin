@@ -15,7 +15,7 @@ module.exports = function (vorpal) {
                 logger.log(colors.red('No bets found!'))
             } else {
                 if (args.eventId && hashRegExp.test(args.eventId)) {
-                    let event = betcoin.eventsManager.getEventById(args.eventId)
+                    let event = betcoin.eventsManager.getEvebentById(args.eventId)
                     if (!event) {
                         logger.log(`No event with id ${args.eventId} was found!`)
                     } else {
@@ -25,7 +25,7 @@ module.exports = function (vorpal) {
                     }
                 } else {
                     logger.log(colors.blue(`Showing all the events:`))
-                    table.logBets(events)
+                    table.logBets(bets)
                 }
             }
             callback()

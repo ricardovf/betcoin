@@ -63,7 +63,7 @@ module.exports = function(vorpal) {
               if (!betcoin.operator.checkWalletPassword(walletId, passwordHash))
                 throw new ArgumentError(`Invalid password for wallet '${walletId}'`)
 
-              let newBet = betcoin.betsManager.addBet(result.betEvent, result.betType, result.betOn, walletId, result.fromAddress, result.betAmount, result.fromAddress)
+              let newBet = betcoin.blockchain.addTransaction(betcoin.betsManager.createBet(result.betEvent, result.betType, result.betOn, walletId, result.fromAddress, result.betAmount, result.fromAddress))
               logger.log(colors.blue(`A aposta ${newBet.id} foi adicionado com sucesso!`))
             
             } catch (ex) {

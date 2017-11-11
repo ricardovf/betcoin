@@ -44,7 +44,7 @@ module.exports = function (vorpal) {
           // check if all fields are ok
           // check if the event is not already in the blockchain
 
-          let newEvent = betcoin.eventsManager.addEvent(result.eventType, result.betType, result.datetime, [result.teamA, result.teamB])
+          let newEvent = betcoin.blockchain.addTransaction(betcoin.eventsManager.createEvent(result.eventType, result.betType, result.datetime, [result.teamA, result.teamB]))
 
           logger.log(colors.blue(`O evento ${newEvent.id} foi adicionado com sucesso!`))
         } catch (ex) {

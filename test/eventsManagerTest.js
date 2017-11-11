@@ -28,15 +28,15 @@ describe('EventsManager test', function () {
     eventsManager = new EventsManager(blockchain, operator, logger)
   })
 
-  describe('addEvent()', function () {
+  describe('createEvent()', function () {
     it('should return an exception if there is only one team defined', function () {
       (() => {
-        eventsManager.addEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai'])
+        eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai'])
       }).should.throw()
     })
 
     it('should add an event to the blockchain with success', function () {
-      eventsManager.addEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira']).should.be.instanceof(Transaction)
+      eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira']).should.be.instanceof(Transaction)
     })
   })
 
@@ -46,7 +46,7 @@ describe('EventsManager test', function () {
     })
 
     it('should return the events after been mined with events added', function () {
-      let transaction = eventsManager.addEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
+      let transaction = eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
 
       transaction.should.be.instanceof(Transaction)
 
@@ -60,7 +60,7 @@ describe('EventsManager test', function () {
     })
 
     it('should return the correct event after been mined with events added', function () {
-      let transaction = eventsManager.addEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
+      let transaction = eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
 
       transaction.should.be.instanceof(Transaction)
 
