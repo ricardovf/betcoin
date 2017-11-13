@@ -5,15 +5,15 @@ const should = require('should')
 const HttpServer = require('../lib/httpServer')
 const Blockchain = require('../lib/blockchain')
 const Operator = require('../lib/operator')
+const EventsManager = require('../lib/betcoin/eventsManager')
+const BetsManager = require('../lib/betcoin/betsManager')
 const Miner = require('../lib/miner')
 const Node = require('../lib/node')
 const fs = require('fs-extra')
-const EventsManager = require('../lib/betcoin/eventsManager')
-const BetsManager = require('../lib/betcoin/betsManager')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe.only('Betcoin integration Test:', () => {
+describe('Betcoin integration Test:', () => {
 
   const name1 = 'betcoinIntegrationTest1'
   const name2 = 'betcoinIntegrationTest2'
@@ -22,11 +22,11 @@ describe.only('Betcoin integration Test:', () => {
     fs.removeSync('data/' + name + '/')
     let blockchain = new Blockchain(name, logger)
     let operator = new Operator(name, blockchain, logger)
-    let miner = new Miner(blockchain, logger)
-    let node = new Node(host, port, peers, blockchain, logger)
     let eventsManager = new EventsManager(blockchain, operator, logger)
     let betsManager = new BetsManager(blockchain, operator, logger)
-    let httpServer = new HttpServer(node, blockchain, operator, miner, logger)
+    let miner = new Miner(blockchain, logger)
+    let node = new Node(host, port, peers, blockchain, logger)
+    let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, miner, logger)
 
     return {
       httpServer,
@@ -364,6 +364,7 @@ describe.only('Betcoin integration Test:', () => {
   })
 
   step('create a result', () => {
+
   })
 
 })
