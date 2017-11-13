@@ -13,7 +13,7 @@ const BetsManager = require('../lib/betcoin/betsManager')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe('Betcoin integration Test:', () => {
+describe.only('Betcoin integration Test:', () => {
 
   const name1 = 'betcoinIntegrationTest1'
   const name2 = 'betcoinIntegrationTest2'
@@ -259,18 +259,18 @@ describe('Betcoin integration Test:', () => {
   step('create a event', () => {
     return Promise.resolve()
       .then(() => {
-        context.event = context.eventsManager1.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
-
         return supertest(context.httpServer1.app)
-          .post(`/blockchain/transactions`)
-          .send(context.event)
-          .expect(201)
-          .expect((res) => {
-            should(res.body.id).be.equal(context.event.id)
+          .post(`/events`)
+          .send({
+            eventType: 'soccer',
+            betType: 'winner',
+            date: '20/11/2017 20:45',
+            teams: ['Avai', 'Figueira']
           })
+          .expect(201)
       })
       .then((res) => {
-        context.eventId = res.body.id
+        context.event = res.body;
       })
   })
 
@@ -292,7 +292,7 @@ describe('Betcoin integration Test:', () => {
           .expect(200)
           .expect((res) => {
             assert.equal(res.body.length, 1, `Expected events array size to be '1'`)
-            assert.equal(res.body[0].id, context.eventId, `Expected event id to be equal ${context.eventId}`)
+            assert.equal(res.body[0].id, context.event.id, `Expected event id to be equal ${context.event.id}`)
           })
       })
   })
@@ -304,7 +304,7 @@ describe('Betcoin integration Test:', () => {
           .post(`/operator/wallets/${context.walletId}/bets`)
           .set({password: walletPassword})
           .send({
-            betEvent: context.eventId,
+            betEvent: context.event.id,
             betType: context.event.eventType,
             betOn: 'Figueira',
             fromAddressId: context.address1,
@@ -313,7 +313,7 @@ describe('Betcoin integration Test:', () => {
           .expect(201)
       })
       .then((res) => {
-        context.betId = res.body.id
+        context.bet = res.body
       })
   })
 
@@ -335,7 +335,7 @@ describe('Betcoin integration Test:', () => {
           .expect(200)
           .expect((res) => {
             assert.equal(res.body.length, 1, `Expected bets array size to be '1'`)
-            assert.equal(res.body[0].id, context.betId, `Expected bet id to be equal ${context.betId}`)
+            assert.equal(res.body[0].id, context.bet.id, `Expected bet id to be equal ${context.bet.id}`)
           })
       })
   })
@@ -361,6 +361,9 @@ describe('Betcoin integration Test:', () => {
             assert.equal(res.body.balance, 8000000000 - 1234567890 - 2, `Expected balance of address '${context.address1}' to be '9000000000'`)
           })
       })
+  })
+
+  step('create a result', () => {
   })
 
 })
