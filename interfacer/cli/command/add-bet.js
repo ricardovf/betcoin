@@ -7,10 +7,10 @@ const Transaction = require('../../../lib/blockchain/transaction')
 const TransactionAssertionError = require('../../../lib/blockchain/transactionAssertionError')
 const ArgumentError = require('../../../lib/util/argumentError')
 
-module.exports = function(vorpal) {
+module.exports = function (vorpal) {
   vorpal
     .command('add-bet', 'Adds a new bet.')
-    .action(function(args, callback) {
+    .action(function (args, callback) {
 
       let events = betcoin.eventsManager.getAllEvents()
       let eventsAddresses = R.map(R.prop('id'), events)
@@ -34,8 +34,8 @@ module.exports = function(vorpal) {
             message: 'Em qual evento você quer apostar?',
             choices: eventsAddresses
           }, {
-            type   : 'list',
-            name   : 'betType',
+            type: 'list',
+            name: 'betType',
             message: 'Qual é o tipo de aposta?',
             choices: ['winner']
           }, {
@@ -56,7 +56,7 @@ module.exports = function(vorpal) {
             name: 'password',
             message: 'Informe a senha da carteira de origem: ',
           }], (result) => {
-            let walletId     = betcoin.operator.getWalletByAddress(result.fromAddress)
+            let walletId = betcoin.operator.getWalletByAddress(result.fromAddress)
             let passwordHash = CryptoUtil.hash(result.password)
 
             try {
@@ -65,7 +65,7 @@ module.exports = function(vorpal) {
 
               let newBet = betcoin.blockchain.addTransaction(betcoin.betsManager.createBet(result.betEvent, result.betType, result.betOn, walletId, result.fromAddress, result.betAmount, result.fromAddress))
               logger.log(colors.blue(`A aposta ${newBet.id} foi adicionado com sucesso!`))
-            
+
             } catch (ex) {
               if (ex instanceof ArgumentError || ex instanceof TransactionAssertionError)
                 logger.log(colors.red(ex.message))

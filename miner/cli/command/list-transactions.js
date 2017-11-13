@@ -1,10 +1,10 @@
-const table   = require('../../../lib/util/cli/table.js')
-const logger  = require('../../../lib/util/cli/logger.js')
+const table = require('../../../lib/util/cli/table.js')
+const logger = require('../../../lib/util/cli/logger.js')
 const betcoin = require('../../../lib/betcoin/index')
 const R = require('ramda')
 const colors = require('colors/safe')
 
-const idRegExp   = /^[0-9]+$/
+const idRegExp = /^[0-9]+$/
 const hashRegExp = /^[a-zA-Z0-9]{4,}$/
 
 module.exports = function (vorpal) {
@@ -14,7 +14,7 @@ module.exports = function (vorpal) {
     .action(function (args, callback) {
       let lastBlock = betcoin.blockchain.getLastBlock()
 
-      if ( ! lastBlock) {
+      if (!lastBlock) {
         logger.log('No transactions found, the blockchain is empty!')
       } else {
         if (args.options === 'all' || args.options === 'a') {
@@ -26,7 +26,7 @@ module.exports = function (vorpal) {
         } else if (args.options === 0 || (args.options && idRegExp.test(args.options))) {
           // Fetch by id
           let block = betcoin.blockchain.getBlockByIndex(args.options)
-          if ( ! block) {
+          if (!block) {
             logger.log(`No block with id ${args.options} was found!`)
           } else {
             logger.log(colors.blue(`Showing transactions on the block #${block.index}:`))
@@ -41,11 +41,11 @@ module.exports = function (vorpal) {
           } else {
             let transaction = betcoin.blockchain.getTransactionFromBlocksById(args.options)
 
-            if ( ! transaction) {
+            if (!transaction) {
               transaction = betcoin.blockchain.getTransactionFromBlocksByHash(args.options)
             }
 
-            if ( ! transaction) {
+            if (!transaction) {
               logger.log(`No block or transaction with hash/index ${args.options} was found!`)
             } else {
               logger.log(colors.blue('Showing transaction by block or transaction hash/index:'))

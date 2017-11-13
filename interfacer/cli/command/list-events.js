@@ -1,8 +1,8 @@
-const table   = require('../../../lib/util/cli/table.js')
-const logger  = require('../../../lib/util/cli/logger.js')
+const table = require('../../../lib/util/cli/table.js')
+const logger = require('../../../lib/util/cli/logger.js')
 const betcoin = require('../../../lib/betcoin/index')
-const colors  = require('colors/safe')
-const R       = require('ramda')
+const colors = require('colors/safe')
+const R = require('ramda')
 
 const hashRegExp = /^[a-zA-Z0-9]{4,}$/
 

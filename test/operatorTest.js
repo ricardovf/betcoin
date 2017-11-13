@@ -1,28 +1,28 @@
 require('mocha-steps')
 
-const supertest  = require('supertest')
-const assert     = require('assert')
-const should     = require('should')
+const supertest = require('supertest')
+const assert = require('assert')
+const should = require('should')
 const HttpServer = require('../lib/httpServer')
 const Blockchain = require('../lib/blockchain')
-const Operator   = require('../lib/operator')
-const Miner      = require('../lib/miner')
-const Node       = require('../lib/node')
+const Operator = require('../lib/operator')
+const Miner = require('../lib/miner')
+const Node = require('../lib/node')
 const Block = require('../lib/blockchain/block')
-const fs         = require('fs-extra')
+const fs = require('fs-extra')
 
 const logger = require('../lib/util/cli/logger.js')
 
 describe('Operator', function () {
   let blockchain, operator, miner
-  let name     = 'operator_test'
+  let name = 'operator_test'
   let password = '1 2 3 4 5'
 
   beforeEach(function () {
     fs.removeSync('data/' + name + '/')
     blockchain = new Blockchain(name, logger)
-    operator   = new Operator(name, blockchain, logger)
-    miner      = new Miner(blockchain, logger)
+    operator = new Operator(name, blockchain, logger)
+    miner = new Miner(blockchain, logger)
   })
 
   describe('getAddressesWithPositiveBalance()', function () {
@@ -32,7 +32,7 @@ describe('Operator', function () {
     })
 
     it('should return an empty list when there is wallets and addresses without positive balance', function () {
-      let newWallet  = operator.createWalletFromPassword(password)
+      let newWallet = operator.createWalletFromPassword(password)
       let newAddress = operator.generateAddressForWallet(newWallet.id)
 
       operator.getWallets().should.be.an.Array().and.not.be.empty()
@@ -40,7 +40,7 @@ describe('Operator', function () {
     })
 
     it('should return an list with addresses with positive balance', function () {
-      let newWallet  = operator.createWalletFromPassword(password)
+      let newWallet = operator.createWalletFromPassword(password)
       let newAddress = operator.generateAddressForWallet(newWallet.id)
       let newAddress1 = operator.generateAddressForWallet(newWallet.id)
 
@@ -63,7 +63,7 @@ describe('Operator', function () {
     })
 
     it('should return an list with all the addresses', function () {
-      let newWallet  = operator.createWalletFromPassword(password)
+      let newWallet = operator.createWalletFromPassword(password)
       let newAddress = operator.generateAddressForWallet(newWallet.id)
       let newAddress1 = operator.generateAddressForWallet(newWallet.id)
 
@@ -82,14 +82,14 @@ describe('Operator', function () {
 
   describe('getWalletByAddress()', function () {
     it('should return null when there is no wallet on the address', function () {
-      let newWallet  = operator.createWalletFromPassword(password)
+      let newWallet = operator.createWalletFromPassword(password)
       let newAddress = operator.generateAddressForWallet(newWallet.id)
 
       should(operator.getWalletByAddress()).be.null()
     })
 
     it('should return the correct wallet id of the address', function () {
-      let newWallet  = operator.createWalletFromPassword(password)
+      let newWallet = operator.createWalletFromPassword(password)
       let newAddress = operator.generateAddressForWallet(newWallet.id)
       let newAddress1 = operator.generateAddressForWallet(newWallet.id)
 

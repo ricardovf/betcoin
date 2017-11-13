@@ -1,11 +1,11 @@
-const betcoin                   = require('../../../lib/betcoin/index')
-const logger                    = require('../../../lib/util/cli/logger.js')
-const colors                    = require('colors/safe')
-const R                         = require('ramda')
-const CryptoUtil                = require('../../../lib/util/cryptoUtil')
-const Transaction               = require('../../../lib/blockchain/transaction')
+const betcoin = require('../../../lib/betcoin/index')
+const logger = require('../../../lib/util/cli/logger.js')
+const colors = require('colors/safe')
+const R = require('ramda')
+const CryptoUtil = require('../../../lib/util/cryptoUtil')
+const Transaction = require('../../../lib/blockchain/transaction')
 const TransactionAssertionError = require('../../../lib/blockchain/transactionAssertionError')
-const ArgumentError             = require('../../../lib/util/argumentError')
+const ArgumentError = require('../../../lib/util/argumentError')
 
 module.exports = function (vorpal) {
   vorpal
@@ -13,30 +13,30 @@ module.exports = function (vorpal) {
     .action(function (args, callback) {
       return this.prompt([
         {
-          type   : 'list',
-          name   : 'eventType',
+          type: 'list',
+          name: 'eventType',
           message: 'Qual é o tipo de evento que você quer adicionar?',
           choices: ['soccer']
         },
         {
-          type   : 'list',
-          name   : 'betType',
+          type: 'list',
+          name: 'betType',
           message: 'Qual é o tipo de aposta disponível nesse evento?',
           choices: ['winner']
         },
         {
-          type   : 'input',
-          name   : 'datetime',
+          type: 'input',
+          name: 'datetime',
           message: 'Em qual data e horário o evento irá acontecer (dd/mm/yyyy hh:mm)? ',
         },
         {
-          type   : 'input',
-          name   : 'teamA',
+          type: 'input',
+          name: 'teamA',
           message: 'Informe o nome do primeiro time participante: ',
         },
         {
-          type   : 'input',
-          name   : 'teamB',
+          type: 'input',
+          name: 'teamB',
           message: 'Informe nome do segundo time participante: ',
         }
       ], (result) => {

@@ -6,7 +6,7 @@ module.exports = function (vorpal) {
     .command('peers', 'Get the list of connected peers.')
     .alias('p')
     .action(function (args, callback) {
-      if (! betcoin.node || betcoin.node.peers.length === 0) {
+      if (!betcoin.node || betcoin.node.peers.length === 0) {
         logger.log('Not connected to any peer.')
       } else {
         betcoin.node.peers.forEach(function (peer) {

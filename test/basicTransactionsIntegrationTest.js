@@ -1,12 +1,12 @@
 require('mocha-steps')
-const supertest  = require('supertest')
-const assert     = require('assert')
+const supertest = require('supertest')
+const assert = require('assert')
 const HttpServer = require('../lib/httpServer')
 const Blockchain = require('../lib/blockchain')
-const Operator   = require('../lib/operator')
-const Miner      = require('../lib/miner')
-const Node       = require('../lib/node')
-const fs         = require('fs-extra')
+const Operator = require('../lib/operator')
+const Miner = require('../lib/miner')
+const Node = require('../lib/node')
+const fs = require('fs-extra')
 
 const logger = require('../lib/util/cli/logger.js')
 
@@ -17,15 +17,20 @@ describe('Basic transactions integration Test:', () => {
   let createBetcoin = (name, host, port, peers) => {
     fs.removeSync('data/' + name + '/')
     let blockchain = new Blockchain(name, logger)
-    let operator   = new Operator(name, blockchain, logger)
-    let miner      = new Miner(blockchain, logger)
-    let node       = new Node(host, port, peers, blockchain, logger)
+    let operator = new Operator(name, blockchain, logger)
+    let miner = new Miner(blockchain, logger)
+    let node = new Node(host, port, peers, blockchain, logger)
     let httpServer = new HttpServer(node, blockchain, operator, miner, logger)
     return httpServer.listen(host, port)
   }
 
   const walletPassword = 't t t t t'
-  let context          = {}
+  let context = {}
+
+  after('stop servers', () => {
+    context.httpServer1.close()
+    context.httpServer2.close()
+  })
 
   step('start server', () => {
     return createBetcoin(name1, 'localhost', 3001, [])
@@ -99,9 +104,9 @@ describe('Basic transactions integration Test:', () => {
           .post(`/operator/wallets/${context.walletId}/transactions`)
           .set({password: walletPassword})
           .send({
-            fromAddress  : context.address1,
-            toAddress    : context.address2,
-            amount       : 1000000000,
+            fromAddress: context.address1,
+            toAddress: context.address2,
+            amount: 1000000000,
             changeAddress: context.address1
           })
           .expect(201)
@@ -231,9 +236,9 @@ describe('Basic transactions integration Test:', () => {
           .post(`/operator/wallets/${context.walletId}/transactions`)
           .set({password: walletPassword})
           .send({
-            fromAddress  : context.address1,
-            toAddress    : context.address2,
-            amount       : 1000000000,
+            fromAddress: context.address1,
+            toAddress: context.address2,
+            amount: 1000000000,
             changeAddress: context.address1
           })
           .expect(201)
@@ -268,4 +273,5 @@ describe('Basic transactions integration Test:', () => {
         context.transactionId = res.body.id
       })
   })
+
 })

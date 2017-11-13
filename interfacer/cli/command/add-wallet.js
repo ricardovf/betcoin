@@ -1,7 +1,7 @@
 const betcoin = require('../../../lib/betcoin/index')
-const logger  = require('../../../lib/util/cli/logger.js')
-const colors  = require('colors/safe')
-const R       = require('ramda')
+const logger = require('../../../lib/util/cli/logger.js')
+const colors = require('colors/safe')
+const R = require('ramda')
 
 module.exports = function (vorpal) {
   vorpal

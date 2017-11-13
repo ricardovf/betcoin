@@ -13,9 +13,10 @@ const BetsManager = require('../lib/betcoin/betsManager')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe('Bets integration Test:', () => {
-  const name1 = 'betsIntegrationTest1'
-  const name2 = 'betsIntegrationTest2'
+describe('Betcoin integration Test:', () => {
+
+  const name1 = 'betcoinIntegrationTest1'
+  const name2 = 'betcoinIntegrationTest2'
 
   let createBetcoin = (name, host, port, peers) => {
     fs.removeSync('data/' + name + '/')
@@ -36,6 +37,11 @@ describe('Bets integration Test:', () => {
 
   const walletPassword = 't t t t t'
   let context = {}
+
+  after('stop servers', () => {
+    context.httpServer1.close()
+    context.httpServer2.close()
+  })
 
   step('start server', () => {
     let betcoin = createBetcoin(name1, 'localhost', 3001, [])

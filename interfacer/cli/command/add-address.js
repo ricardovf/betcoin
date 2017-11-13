@@ -1,7 +1,7 @@
-const betcoin    = require('../../../lib/betcoin/index')
-const logger     = require('../../../lib/util/cli/logger.js')
-const colors     = require('colors/safe')
-const R          = require('ramda')
+const betcoin = require('../../../lib/betcoin/index')
+const logger = require('../../../lib/util/cli/logger.js')
+const colors = require('colors/safe')
+const R = require('ramda')
 const CryptoUtil = require('../../../lib/util/cryptoUtil')
 
 module.exports = function (vorpal) {
@@ -10,8 +10,8 @@ module.exports = function (vorpal) {
     .alias('aa')
     .action(function (args, callback) {
       if (args.walletId && args.walletPassword) {
-        let walletId     = args.walletId
-        let password     = args.walletPassword
+        let walletId = args.walletId
+        let password = args.walletPassword
         let passwordHash = CryptoUtil.hash(password)
 
         if (!betcoin.operator.checkWalletPassword(walletId, passwordHash)) {
