@@ -7,13 +7,14 @@ const Blockchain = require('../lib/blockchain')
 const Operator = require('../lib/operator')
 const EventsManager = require('../lib/betcoin/eventsManager')
 const BetsManager = require('../lib/betcoin/betsManager')
+const ResultsManager = require('../lib/betcoin/resultsManager')
 const Miner = require('../lib/miner')
 const Node = require('../lib/node')
 const fs = require('fs-extra')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe('Betcoin integration Test:', () => {
+describe.only('Betcoin integration Test:', () => {
 
   const name1 = 'betcoinIntegrationTest1'
   const name2 = 'betcoinIntegrationTest2'
@@ -24,9 +25,10 @@ describe('Betcoin integration Test:', () => {
     let operator = new Operator(name, blockchain, logger)
     let eventsManager = new EventsManager(blockchain, operator, logger)
     let betsManager = new BetsManager(blockchain, operator, logger)
+    let resultsManager = new ResultsManager(blockchain, operator, logger)
     let miner = new Miner(blockchain, logger)
     let node = new Node(host, port, peers, blockchain, logger)
-    let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, miner, logger)
+    let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, resultsManager, miner, logger)
 
     return {
       httpServer,
@@ -364,7 +366,43 @@ describe('Betcoin integration Test:', () => {
   })
 
   step('create a result', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/results`)
+          .send({
+            resultEvent: context.event.id,
+            resultBetType: context.event.betType,
+            result: 'Figueira'
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.result = res.body;
+      })
+  })
 
+  step('mine a block with the event', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address2})
+          .expect(201)
+      })
+  })
+
+  step('check if the event was added', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/blockchain/results`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.length, 1, `Expected results array size to be '1'`)
+            assert.equal(res.body[0].id, context.result.id, `Expected result id to be equal ${context.result.id}`)
+          })
+      })
   })
 
 })
