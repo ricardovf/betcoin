@@ -75,6 +75,18 @@ describe('Basic transactions integration Test:', () => {
       })
   })
 
+  step('create address 3 (for fee test)', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/addresses`)
+          .set({password: walletPassword})
+          .expect(201)
+      }).then((res) => {
+        context.address3 = res.body.address
+      })
+  })
+
   step('mine an empty block', () => {
     return Promise.resolve()
       .then(() => {
@@ -274,4 +286,114 @@ describe('Basic transactions integration Test:', () => {
       })
   })
 
+  step('mine a block with transactions', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address1})
+          .expect(201)
+      })
+  })
+
+  step('wait for nodes synchronization', () => {
+    return Promise.resolve()
+      .then(() => {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            resolve()
+          }, 1000) // Wait 1s then resolve.
+        })
+      })
+  })
+
+  step('check address 2 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address2}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 2000000000, `Expected balance of address '${context.address2}' to be '2000000000'`)
+          })
+      })
+  })
+
+  /**
+   * Test fee payment
+   */
+  step('create a new transaction to check fee', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/transactions`)
+          .set({password: walletPassword})
+          .send({
+            fromAddress: context.address2,
+            toAddress: context.address3,
+            amount: 100000000,
+            changeAddress: context.address2
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.transactionId = res.body.id
+      })
+  })
+
+  step('wait for nodes synchronization', () => {
+    return Promise.resolve()
+      .then(() => {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            resolve()
+          }, 1000) // Wait 1s then resolve.
+        })
+      })
+  })
+
+  step('mine a block with transactions', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address1})
+          .expect(201)
+      })
+  })
+
+  step('wait for nodes synchronization', () => {
+    return Promise.resolve()
+      .then(() => {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            resolve()
+          }, 1000) // Wait 1s then resolve.
+        })
+      })
+  })
+
+  step('check address 3 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address3}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 100000000, `Expected balance of address '${context.address3}' to be '1000000000'`)
+          })
+      })
+  })
+
+  step('check address 2 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address2}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 1899999999, `Expected balance of address '${context.address2}' to be '1899999999'`)
+          })
+      })
+  })
 })

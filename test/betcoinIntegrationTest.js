@@ -13,7 +13,7 @@ const BetsManager = require('../lib/betcoin/betsManager')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe.only('Betcoin integration Test:', () => {
+describe('Betcoin integration Test:', () => {
 
   const name1 = 'betcoinIntegrationTest1'
   const name2 = 'betcoinIntegrationTest2'
