@@ -6,6 +6,7 @@ const CryptoUtil = require('../../../lib/util/cryptoUtil')
 const Transaction = require('../../../lib/blockchain/transaction')
 const TransactionAssertionError = require('../../../lib/blockchain/transactionAssertionError')
 const ArgumentError = require('../../../lib/util/argumentError')
+const moment = require('moment')
 
 module.exports = function (vorpal) {
   vorpal
@@ -26,8 +27,15 @@ module.exports = function (vorpal) {
         },
         {
           type: 'input',
-          name: 'datetime',
-          message: 'Em qual data e horário o evento irá acontecer (dd/mm/yyyy hh:mm)? ',
+          name: 'date',
+          message: 'Em qual data o evento irá acontecer (dd/mm/yyyy)? ',
+          default: moment().days(3).format('DD/MM/YYYY')
+        },
+        {
+          type: 'input',
+          name: 'time',
+          message: 'Em qual horário o evento irá acontecer (hh:mm)? ',
+          default: '22:00'
         },
         {
           type: 'input',
@@ -37,14 +45,14 @@ module.exports = function (vorpal) {
         {
           type: 'input',
           name: 'teamB',
-          message: 'Informe nome do segundo time participante: ',
+          message: 'Informe o nome do segundo time participante: ',
         }
       ], (result) => {
         try {
           // check if all fields are ok
           // check if the event is not already in the blockchain
 
-          let newEvent = betcoin.blockchain.addTransaction(betcoin.eventsManager.createEvent(result.eventType, result.betType, result.datetime, [result.teamA, result.teamB]))
+          let newEvent = betcoin.blockchain.addTransaction(betcoin.eventsManager.createEvent(result.eventType, result.betType, `${result.date} ${result.time}`, [result.teamA, result.teamB]))
 
           logger.log(colors.blue(`O evento ${newEvent.id} foi adicionado com sucesso!`))
         } catch (ex) {
