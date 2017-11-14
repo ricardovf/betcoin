@@ -15,7 +15,7 @@ const moment = require('moment')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe.only('Betcoin integration Test:', () => {
+describe('Betcoin integration Test:', () => {
 
   const SERVER_1_PORT = 3001
   const SERVER_2_PORT = 3002

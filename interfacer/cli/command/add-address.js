@@ -14,12 +14,16 @@ module.exports = function (vorpal) {
         let password = args.walletPassword
         let passwordHash = CryptoUtil.hash(password)
 
-        if (!betcoin.operator.checkWalletPassword(walletId, passwordHash)) {
-          logger.log(colors.red(`Invalid password for wallet ${walletId}`))
+        if (!betcoin.operator.getWalletById(walletId)) {
+          logger.log(colors.red(`Invalid  wallet id ${walletId}`))
         } else {
-          let newAddress = betcoin.operator.generateAddressForWallet(walletId)
+          if (!betcoin.operator.checkWalletPassword(walletId, passwordHash)) {
+            logger.log(colors.red(`Invalid password for wallet ${walletId}`))
+          } else {
+            let newAddress = betcoin.operator.generateAddressForWallet(walletId)
 
-          logger.log(colors.blue(`New address created with id ${newAddress}`))
+            logger.log(colors.blue(`New address created with id ${newAddress}`))
+          }
         }
       }
 

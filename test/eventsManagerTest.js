@@ -57,7 +57,6 @@ describe('EventsManager test', function () {
     })
 
     it('should create a transaction event with success', function () {
-      console.log(moment().day(1))
       eventsManager.createEvent('soccer', 'winner', moment().add(1, 'days'), ['Avai', 'Figueira']).should.be.instanceof(Transaction)
     })
   })
