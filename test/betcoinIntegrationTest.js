@@ -171,7 +171,7 @@ describe.only('Betcoin integration Test:', () => {
   })
 
   step('start server 2', () => {
-    let betcoin = createBetcoin(name2, 'localhost', SERVER_2_PORT, [{url: 'http://localhost:'+SERVER_1_PORT}])
+    let betcoin = createBetcoin(name2, 'localhost', SERVER_2_PORT, [{url: 'http://localhost:' + SERVER_1_PORT}])
     context.eventsManager2 = betcoin.eventsManager
     context.betsManager2 = betcoin.betsManager
 
@@ -261,6 +261,130 @@ describe.only('Betcoin integration Test:', () => {
       })
   })
 
+  step('create address 3', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/addresses`)
+          .set({password: walletPassword})
+          .expect(201)
+      }).then((res) => {
+        context.address3 = res.body.address
+      })
+  })
+
+  step('create address 4', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/addresses`)
+          .set({password: walletPassword})
+          .expect(201)
+      }).then((res) => {
+        context.address4 = res.body.address
+      })
+  })
+
+  step('create address 5', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/addresses`)
+          .set({password: walletPassword})
+          .expect(201)
+      }).then((res) => {
+        context.address5 = res.body.address
+      })
+  })
+
+  step('mine a block rewarding address 3', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address3})
+          .expect(201)
+      })
+  })
+
+  step('transfer 2 to address 4', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/transactions`)
+          .set({password: walletPassword})
+          .send({
+            fromAddress: context.address3,
+            toAddress: context.address4,
+            amount: 2,
+            changeAddress: context.address3
+          })
+          .expect(201)
+      })
+  })
+
+  step('transfer 3 to address 5', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/transactions`)
+          .set({password: walletPassword})
+          .send({
+            fromAddress: context.address3,
+            toAddress: context.address5,
+            amount: 3,
+            changeAddress: context.address3
+          })
+          .expect(201)
+      })
+  })
+
+  step('mine a block rewarding address 3 again', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address3})
+          .expect(201)
+      })
+  })
+
+  step('check address 3 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address3}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 14999999997, `Expected balance of address '${context.address1}' to be '14.999.999.997'`)
+          })
+      })
+  })
+
+  step('check address 4 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address4}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 2, `Expected balance of address '${context.address4}' to be '2'`)
+          })
+      })
+  })
+
+  step('check address 5 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address5}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 3, `Expected balance of address '${context.address5}' to be '3'`)
+          })
+      })
+  })
+
   step('create a event', () => {
     return Promise.resolve()
       .then(() => {
@@ -275,7 +399,7 @@ describe.only('Betcoin integration Test:', () => {
           .expect(201)
       })
       .then((res) => {
-        context.event = res.body;
+        context.event = res.body
       })
   })
 
@@ -381,7 +505,7 @@ describe.only('Betcoin integration Test:', () => {
           .expect(201)
       })
       .then((res) => {
-        context.result = res.body;
+        context.result = res.body
       })
   })
 
@@ -416,6 +540,228 @@ describe.only('Betcoin integration Test:', () => {
           .expect(200)
           .expect((res) => {
             assert.equal(res.body.balance, 8000000000 - 2, `Expected balance of address '${context.address1}' to be '7999999998'`)
+          })
+      })
+  })
+
+  step('create event 2', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/events`)
+          .send({
+            eventType: 'soccer',
+            betType: 'winner',
+            date: moment().add(10, 'days').format(EventsManager.dateFormat()),
+            teams: ['São Paulo', 'Figueira']
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.event2 = res.body
+      })
+  })
+
+  step('mine a block with event 2', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address2})
+          .expect(201)
+      })
+  })
+
+  step('check if event 2 was added', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/blockchain/events`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.length, 2, `Expected events array size to be '2'`)
+            assert.equal(res.body[1].id, context.event2.id, `Expected event 2 id to be equal ${context.event2.id}`)
+          })
+      })
+  })
+
+  step('create bet 2', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/bets`)
+          .set({password: walletPassword})
+          .send({
+            betEvent: context.event2.id,
+            betType: context.event2.eventType,
+            betOn: 'Figueira',
+            fromAddressId: context.address3,
+            amount: 100
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.bet2 = res.body
+      })
+  })
+
+  step('check address 4 balance', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address4}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 2, `Expected balance of address '${context.address4}' to be '2'`)
+          })
+      })
+  })
+
+  step('create bet 3', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/bets`)
+          .set({password: walletPassword})
+          .send({
+            betEvent: context.event2.id,
+            betType: context.event2.eventType,
+            betOn: 'São Paulo',
+            fromAddressId: context.address4,
+            amount: 1
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.bet3 = res.body
+      })
+  })
+
+  step('mine a block with the bets', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address2})
+          .expect(201)
+      })
+  })
+
+  step('create bet 4', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/operator/wallets/${context.walletId}/bets`)
+          .set({password: walletPassword})
+          .send({
+            betEvent: context.event2.id,
+            betType: context.event2.eventType,
+            betOn: 'São Paulo',
+            fromAddressId: context.address5,
+            amount: 2
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.bet4 = res.body
+      })
+  })
+
+  step('mine a block with the bets', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address2})
+          .expect(201)
+      })
+  })
+
+  step('check if the bets were added', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/blockchain/bets`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.length, 4, `Expected bets array size to be '4'`)
+            // assert.equal(res.body[0].id, context.bet.id, `Expected bet id to be equal ${context.bet.id}`)
+          })
+      })
+  })
+
+  step('create result 2', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/results`)
+          .send({
+            resultEvent: context.event2.id,
+            resultBetType: context.event2.data.betType,
+            result: 'São Paulo'
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.result2 = res.body
+      })
+  })
+
+  step('mine a block with the result', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address2})
+          .expect(201)
+      })
+  })
+
+  step('check if the result was added', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/blockchain/results`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.length, 2, `Expected results array size to be '2'`)
+            assert.equal(res.body[1].id, context.result2.id, `Expected result id to be equal ${context.result2.id}`)
+          })
+      })
+  })
+
+  step('check if balance of address 3 was altered', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address3}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 14999999896, `Expected balance of address '${context.address3}' to be '14999999896'`)
+          })
+      })
+  })
+
+  step('check if balance of address 4 was altered', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address4}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 34.333333333333336, `Expected balance of address '${context.address4}' to be '34.333333333333336'`)
+          })
+      })
+  })
+
+  step('check if balance of address 5 was altered', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address5}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 68.66666666666667, `Expected balance of address '${context.address5}' to be '68.66666666666667'`)
           })
       })
   })
