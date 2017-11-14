@@ -12,6 +12,7 @@ const Miner = require('../lib/miner')
 const Node = require('../lib/node')
 const fs = require('fs-extra')
 const R = require('ramda')
+const moment = require('moment')
 
 const logger = require('../lib/util/cli/logger.js')
 
@@ -110,7 +111,7 @@ describe('Events integration Test:', () => {
           .send({
             eventType: 'soccer',
             betType: 'winner',
-            date: '20/11/2017 20:45',
+            date: moment().add(10, 'days').format(EventsManager.dateFormat()),
             teams: ['Avai', 'Figueira']
           })
           .expect(201)

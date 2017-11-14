@@ -34,7 +34,7 @@ describe('EventsManager test', function () {
   describe('createEvent()', function () {
     it('should return an exception if there is only one team defined', function () {
       (() => {
-        eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai'])
+        eventsManager.createEvent('soccer', 'winner', moment().add(10, 'days'), ['Avai'])
       }).should.throw()
     })
 
@@ -52,12 +52,13 @@ describe('EventsManager test', function () {
 
     it('should return an exception if the date is in the past', function () {
       (() => {
-        eventsManager.createEvent('soccer', 'winner', moment().day(-1), ['Avai', 'Figueira'])
+        eventsManager.createEvent('soccer', 'winner', moment().subtract(1, 'days'), ['Avai', 'Figueira'])
       }).should.throw()
     })
 
     it('should create a transaction event with success', function () {
-      eventsManager.createEvent('soccer', 'winner', moment().day(2), ['Avai', 'Figueira']).should.be.instanceof(Transaction)
+      console.log(moment().day(1))
+      eventsManager.createEvent('soccer', 'winner', moment().add(1, 'days'), ['Avai', 'Figueira']).should.be.instanceof(Transaction)
     })
   })
 
@@ -67,7 +68,7 @@ describe('EventsManager test', function () {
     })
 
     it('should return the events after been mined with events added', function () {
-      let transaction = eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
+      let transaction = eventsManager.createEvent('soccer', 'winner', moment().add(10, 'days'), ['Avai', 'Figueira'])
       transaction.should.be.instanceof(Transaction)
       let transactionCreated = blockchain.addTransaction(Transaction.fromJson(transaction))
       transactionCreated.should.be.instanceof(Transaction)
@@ -82,7 +83,7 @@ describe('EventsManager test', function () {
     })
 
     it('should return the correct event after been mined with events added', function () {
-      let transaction = eventsManager.createEvent('soccer', 'winner', '20/11/2017 20:45', ['Avai', 'Figueira'])
+      let transaction = eventsManager.createEvent('soccer', 'winner', moment().add(10, 'days'), ['Avai', 'Figueira'])
       transaction.should.be.instanceof(Transaction)
       let transactionCreated = blockchain.addTransaction(Transaction.fromJson(transaction))
       transactionCreated.should.be.instanceof(Transaction)
