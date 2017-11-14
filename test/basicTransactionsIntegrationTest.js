@@ -13,6 +13,8 @@ const fs = require('fs-extra')
 const logger = require('../lib/util/cli/logger.js')
 
 describe('Basic transactions integration Test:', () => {
+  const SERVER_1_PORT = 3011
+  const SERVER_2_PORT = 3012
   const name1 = 'basicTransactionsIntegrationTest1'
   const name2 = 'basicTransactionsIntegrationTest2'
 
@@ -33,12 +35,12 @@ describe('Basic transactions integration Test:', () => {
   let context = {}
 
   after('stop servers', () => {
-    context.httpServer1.close()
-    context.httpServer2.close()
+    context.httpServer1 && context.httpServer1.close()
+    context.httpServer2 && context.httpServer2.close()
   })
 
   step('start server', () => {
-    return createBetcoin(name1, 'localhost', 3001, [])
+    return createBetcoin(name1, 'localhost', SERVER_1_PORT, [])
       .then((httpServer) => {
         context.httpServer1 = httpServer
       })
@@ -193,7 +195,7 @@ describe('Basic transactions integration Test:', () => {
   })
 
   step('start server 2', () => {
-    return createBetcoin(name2, 'localhost', 3002, [{url: 'http://localhost:3001'}])
+    return createBetcoin(name2, 'localhost', SERVER_2_PORT, [{url: 'http://localhost:'+SERVER_1_PORT}])
       .then((httpServer) => {
         context.httpServer2 = httpServer
       })

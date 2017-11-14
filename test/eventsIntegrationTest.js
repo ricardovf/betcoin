@@ -7,6 +7,7 @@ const Blockchain = require('../lib/blockchain')
 const Operator = require('../lib/operator')
 const EventsManager = require('../lib/betcoin/eventsManager')
 const BetsManager = require('../lib/betcoin/betsManager')
+const ResultsManager = require('../lib/betcoin/resultsManager')
 const Miner = require('../lib/miner')
 const Node = require('../lib/node')
 const fs = require('fs-extra')
@@ -16,6 +17,7 @@ const logger = require('../lib/util/cli/logger.js')
 
 describe('Events integration Test:', () => {
 
+  const SERVER_1_PORT = 3021
   const name1 = 'eventsIntegrationTest1'
 
   let createBetcoin = (name, host, port, peers) => {
@@ -24,9 +26,10 @@ describe('Events integration Test:', () => {
     let operator = new Operator(name, blockchain, logger)
     let eventsManager = new EventsManager(blockchain, operator, logger)
     let betsManager = new BetsManager(blockchain, operator, logger)
+    let resultsManager = new ResultsManager(blockchain, operator, logger)
     let miner = new Miner(blockchain, logger)
     let node = new Node(host, port, peers, blockchain, logger)
-    let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, miner, logger)
+    let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, resultsManager, miner, logger)
 
     return {
       httpServer,
@@ -43,11 +46,11 @@ describe('Events integration Test:', () => {
   })
 
   step('start server', () => {
-    let betcoin = createBetcoin(name1, 'localhost', 3001, [])
+    let betcoin = createBetcoin(name1, 'localhost', SERVER_1_PORT, [])
     context.eventsManager1 = betcoin.eventsManager
     context.betsManager1 = betcoin.betsManager
 
-    return betcoin.httpServer.listen('localhost', 3001)
+    return betcoin.httpServer.listen('localhost', SERVER_1_PORT)
       .then((httpServer) => {
         context.httpServer1 = httpServer
       })
