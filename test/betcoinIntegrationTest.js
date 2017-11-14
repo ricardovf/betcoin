@@ -415,7 +415,7 @@ describe.only('Betcoin integration Test:', () => {
           .get(`/operator/wallets/${context.walletId}/addresses/${context.address1}/balance`)
           .expect(200)
           .expect((res) => {
-            assert.equal(res.body.balance, 8000000000 - 2, `Expected balance of address '${context.address1}' to be '9000000000'`)
+            assert.equal(res.body.balance, 8000000000 - 2, `Expected balance of address '${context.address1}' to be '7999999998'`)
           })
       })
   })
