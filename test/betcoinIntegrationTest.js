@@ -14,7 +14,7 @@ const fs = require('fs-extra')
 
 const logger = require('../lib/util/cli/logger.js')
 
-describe('Betcoin integration Test:', () => {
+describe.only('Betcoin integration Test:', () => {
 
   const SERVER_1_PORT = 3001
   const SERVER_2_PORT = 3002
@@ -367,45 +367,44 @@ describe('Betcoin integration Test:', () => {
       })
   })
 
-  // commented cause it was not working (error 500)
-  // step('create a result', () => {
-  //   return Promise.resolve()
-  //     .then(() => {
-  //       return supertest(context.httpServer1.app)
-  //         .post(`/results`)
-  //         .send({
-  //           resultEvent: context.event.id,
-  //           resultBetType: context.event.betType,
-  //           result: 'Figueira'
-  //         })
-  //         .expect(201)
-  //     })
-  //     .then((res) => {
-  //       context.result = res.body;
-  //     })
-  // })
-  //
-  // step('mine a block with the event', () => {
-  //   return Promise.resolve()
-  //     .then(() => {
-  //       return supertest(context.httpServer1.app)
-  //         .post('/miner/mine')
-  //         .send({rewardAddress: context.address2})
-  //         .expect(201)
-  //     })
-  // })
-  //
-  // step('check if the event was added', () => {
-  //   return Promise.resolve()
-  //     .then(() => {
-  //       return supertest(context.httpServer1.app)
-  //         .get(`/blockchain/results`)
-  //         .expect(200)
-  //         .expect((res) => {
-  //           assert.equal(res.body.length, 1, `Expected results array size to be '1'`)
-  //           assert.equal(res.body[0].id, context.result.id, `Expected result id to be equal ${context.result.id}`)
-  //         })
-  //     })
-  // })
+  step('create a result', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post(`/results`)
+          .send({
+            resultEvent: context.event.id,
+            resultBetType: context.event.data.betType,
+            result: 'Figueira'
+          })
+          .expect(201)
+      })
+      .then((res) => {
+        context.result = res.body;
+      })
+  })
+
+  step('mine a block with the result', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .post('/miner/mine')
+          .send({rewardAddress: context.address2})
+          .expect(201)
+      })
+  })
+
+  step('check if the result was added', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/blockchain/results`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.length, 1, `Expected results array size to be '1'`)
+            assert.equal(res.body[0].id, context.result.id, `Expected result id to be equal ${context.result.id}`)
+          })
+      })
+  })
 
 })
