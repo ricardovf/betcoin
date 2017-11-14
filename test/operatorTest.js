@@ -11,6 +11,8 @@ const Node = require('../lib/node')
 const Block = require('../lib/blockchain/block')
 const fs = require('fs-extra')
 
+const ResultsManager = require('../lib/betcoin/resultsManager')
+
 const logger = require('../lib/util/cli/logger.js')
 
 describe('Operator', function () {
@@ -22,7 +24,7 @@ describe('Operator', function () {
     fs.removeSync('data/' + name + '/')
     blockchain = new Blockchain(name, logger)
     operator = new Operator(name, blockchain, logger)
-    miner = new Miner(blockchain, logger)
+    miner = new Miner(blockchain, new ResultsManager(blockchain, operator, logger), logger)
   })
 
   describe('getAddressesWithPositiveBalance()', function () {

@@ -26,8 +26,8 @@ describe('Events integration Test:', () => {
     let operator = new Operator(name, blockchain, logger)
     let eventsManager = new EventsManager(blockchain, operator, logger)
     let betsManager = new BetsManager(blockchain, operator, logger)
-    let resultsManager = new ResultsManager(blockchain, operator, logger)
-    let miner = new Miner(blockchain, logger)
+    let resultsManager = new ResultsManager(blockchain, operator, betsManager, logger)
+    let miner = new Miner(blockchain, resultsManager, logger)
     let node = new Node(host, port, peers, blockchain, logger)
     let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, resultsManager, miner, logger)
 

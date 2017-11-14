@@ -27,8 +27,8 @@ describe.only('Betcoin integration Test:', () => {
     let operator = new Operator(name, blockchain, logger)
     let eventsManager = new EventsManager(blockchain, operator, logger)
     let betsManager = new BetsManager(blockchain, operator, logger)
-    let resultsManager = new ResultsManager(blockchain, operator, logger)
-    let miner = new Miner(blockchain, logger)
+    let resultsManager = new ResultsManager(blockchain, operator, betsManager, logger)
+    let miner = new Miner(blockchain, resultsManager, logger)
     let node = new Node(host, port, peers, blockchain, logger)
     let httpServer = new HttpServer(node, blockchain, operator, eventsManager, betsManager, resultsManager, miner, logger)
 
@@ -403,6 +403,18 @@ describe.only('Betcoin integration Test:', () => {
           .expect((res) => {
             assert.equal(res.body.length, 1, `Expected results array size to be '1'`)
             assert.equal(res.body[0].id, context.result.id, `Expected result id to be equal ${context.result.id}`)
+          })
+      })
+  })
+
+  step('check if balance of address 1 was altered', () => {
+    return Promise.resolve()
+      .then(() => {
+        return supertest(context.httpServer1.app)
+          .get(`/operator/wallets/${context.walletId}/addresses/${context.address1}/balance`)
+          .expect(200)
+          .expect((res) => {
+            assert.equal(res.body.balance, 8000000000 - 2, `Expected balance of address '${context.address1}' to be '9000000000'`)
           })
       })
   })
